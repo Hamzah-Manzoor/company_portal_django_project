@@ -1,0 +1,81 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Sign Up</title>-->
+<!--    {% load static %}-->
+<!--    <link rel="stylesheet" href="{% static 'employee_management/css/signup.css' %}">-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div class="signup-container">-->
+<!--        <div class="logo-container">-->
+<!--            <img src="{% static 'employee_management/assets/signup_image.png' %}" alt="Company Logo" class="company-logo">-->
+<!--            &lt;!&ndash; <h1 class="company-name">Code Fulcrum</h1> &ndash;&gt;-->
+<!--        </div>-->
+<!--        <form id="signup-form">-->
+<!--            <label for="email">Email:</label>-->
+<!--            <input type="email" id="email" name="email" required>-->
+
+<!--            <label for="password">Password:</label>-->
+<!--            <input type="password" id="password" name="password" required>-->
+
+<!--            <label for="confirm-password">Confirm Password:</label>-->
+<!--            <input type="password" id="confirm-password" name="confirm-password" required>-->
+
+<!--            <label for="date-of-joining">Date of Joining:</label>-->
+<!--            <input type="date" id="date-of-joining" name="date-of-joining">-->
+
+<!--            <label for="position">Position:</label>-->
+<!--            <input type="text" id="position" name="position">-->
+
+<!--            <label for="employee-id">Employee ID:</label>-->
+<!--            <input type="text" id="employee-id" name="employee-id">-->
+
+<!--            <label for="birthdate">Birthdate:</label>-->
+<!--            <input type="date" id="birthdate" name="birthdate">-->
+
+<!--            <button type="submit">Sign Up</button>-->
+<!--        </form>-->
+<!--        <div class="login-link">-->
+<!--            <p>Already have an account? <a href="/employee_management/login">Login</a></p>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; JavaScript &ndash;&gt;-->
+<!--    <script src="{% static 'employee_management/js/signup.js' %}"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'employee_management/css/signup.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="signup-container">
+        <div class="logo-container">
+            <img src="{% static 'employee_management/assets/signup_image.png' %}" alt="Company Logo" class="company-logo">
+        </div>
+        <form id="signup-form" method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Sign Up</button>
+        </form>
+        <div class="login-link">
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'employee_management/js/signup.js' %}"></script>
+</body>
+</html>
+

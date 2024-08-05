@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Employee Portal{% endblock %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'employee_management/css/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Divider -->
+    <hr class="divider">
+
+    <!-- Hero Section with Slider -->
+    <section aria-label="Hero Section" class="hero-section">
+        <div class="slider" id="slider">
+            <div class="slide" data-index="0">
+                <img src="{% static 'employee_management/assets/hero_section_1_final.png' %}" alt="Image 1">
+            </div>
+            <div class="slide" data-index="1">
+                <img src="{% static 'employee_management/assets/hero_section_2_final.png' %}" alt="Image 2">
+            </div>
+            <div class="slide" data-index="2">
+                <img src="{% static 'employee_management/assets/hero_section_3_final.png' %}" alt="Image 3">
+            </div>
+        </div>
+        <div class="controls">
+            <button id="prev">&lt;</button>
+            <button id="next">&gt;</button>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <main class="cards-section">
+
+        <!-- Upcoming Events and Announcements Card -->
+        <article class="card">
+            <h2>Events and Announcements</h2>
+
+            <div class="events-section">
+                <h3>Events</h3>
+                <ul id="events-list">
+                    {% for event in events %}
+                        <li> <b>{{ event.title }}</b> <br> {{ event.date }} at {{ event.time }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="announcements-section">
+                <h3>Announcements</h3>
+                <ul id="announcements-list">
+                    {% for announcement in announcements %}
+                        <li><b>{{ announcement.title }}</b> <br> {{ announcement.date }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="view-all-events">
+                <button onclick="window.location.href='events'">View All Events</button>
+            </div>
+        </article>
+
+        <!-- Annual Leave Details Card -->
+        <article class="card annual-leaves-card">
+            <h2>Annual Leave Details</h2>
+            <div class="leave-details">
+                <div class="employee-leave-details">
+                    <h3>{{ employee.name }} ({{ employee.position }})</h3>
+                    <div class="leave-item">
+                        <span class="leave-title">Annual Leaves:</span>
+                        <span class="leave-value">{{ employee.annual_leaves_taken }} / {{ allocated_leaves.annual_leaves }}</span>
+                    </div>
+                    <div class="leave-item">
+                        <span class="leave-title">Casual Leaves:</span>
+                        <span class="leave-value">{{ employee.casual_leaves_taken }} / {{ allocated_leaves.casual_leaves }}</span>
+                    </div>
+                    <div class="leave-item">
+                        <span class="leave-title">Medical Leaves:</span>
+                        <span class="leave-value">{{ employee.medical_leaves_taken }} / {{ allocated_leaves.medical_leaves }}</span>
+                    </div>
+                    <div class="leave-item">
+                        <span class="leave-title">Unpaid Leaves:</span>
+                        <span class="leave-value">{{ employee.unpaid_leaves_taken }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="apply-leave-container">
+                <button onclick="window.location.href='leaves'">Apply For Leave</button>
+            </div>
+        </article>
+
+        <!-- Upcoming Birthdays Card -->
+        <article class="card">
+            <h2>Upcoming Birthdays</h2>
+            <ul class="birthday-list">
+                {% for employee in upcoming_birthdays %}
+                    <li>
+                        <i class="fas fa-user-circle profile-icon2"></i>
+                        <div class="birthday-info">
+                            <span class="birthday-name">{{ employee.name }}</span>
+                            <span class="birthday-position">{{ employee.position }}</span>
+                            <span class="birthday-date">{{ employee.birthdate|date:"F j" }}</span>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li>No upcoming birthdays in the next 60 days.</li>
+                {% endfor %}
+            </ul>
+        </article>
+
+        <!-- Lunch Menu Card -->
+        {% load custom_filters %}
+        <article class="card">
+            <h2>Lunch Menu</h2>
+            <div class="lunch-menu-content">
+                <div class="menu-item">
+                    <i class="fas fa-utensils"></i>
+                    <div>
+                        <p><strong>Today's Menu:</strong></p>
+                        {% if todays_menu == "Weekend" %}
+                            <p>Off-Day</p>
+                        {% else %}
+                            <p>{{ todays_menu.dish_name }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="menu-time">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <p><strong>Lunch Time:</strong></p>
+                        <p>{{ admin.lunch_time|format_lunch_time }}</p>
+                    </div>
+                </div>
+            </div>
+            {% if todays_menu != "Weekend" %}
+            <div class="reaction-buttons">
+                <form method="post" action="{% url 'like_lunch' %}" id="like-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="like" value="1">
+                    <button type="submit" id="like-button" class="like-button" style="background-color: {% if liked %}gray{% else %}#0073e6{% endif %};">
+                        <i class="fas fa-thumbs-up"></i> Like <span id="like-count">{{ likes_count }}</span>
+                    </button>
+                </form>
+
+                <form method="post" action="{% url 'like_lunch' %}" id="dislike-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="dislike" value="1">
+                    <button type="submit" id="dislike-button" class="dislike-button" style="background-color: {% if disliked %}gray{% else %}#0073e6{% endif %};">
+                        <i class="fas fa-thumbs-down"></i> Dislike <span id="dislike-count">{{ dislikes_count }}</span>
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </article>
+
+    </main>
+
+    <script src="{% static 'employee_management/js/index.js' %}"></script>
+
+{% endblock %}
+

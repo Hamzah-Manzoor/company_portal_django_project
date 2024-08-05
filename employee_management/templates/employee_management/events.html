@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Events - Employee Portal{% endblock %}
+
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'employee_management/css/events.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- Divider -->
+    <hr class="divider">
+
+    <!-- Events and Announcements Section -->
+    <main class="events-announcements-section">
+        <h1>Upcoming Events and Announcements</h1>
+        <section class="events-section">
+            <h2>Upcoming Events</h2>
+            <div id="events-container">
+                {% for event in upcoming_events %}
+                    <div class="event-card" data-event-id="{{ event.id }}">
+                        <h3>{{ event.title }}</h3>
+                        <p><strong>Date:</strong> {{ event.date }}</p>
+                        <p><strong>Time:</strong> {{ event.time }}</p>
+                        <p><strong>Details:</strong> {{ event.description }}</p>
+                        <!-- Edit Button -->
+                        {% if 'update' in user_permissions %}
+                            <button class="btn btn-success" onclick="openEditModal('{{ event.id }}', '{{ event.title }}', '{{ event.date }}', '{{ event.time }}', '{{ event.description }}')">Edit</button>
+                        {% endif %}
+                        {% if 'delete' in user_permissions %}
+                            <form action="{% url 'event_delete' event.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                    <!-- Edit Event Modal -->
+                    <div id="editEventModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeEditModal()">&times;</span>
+                            <h2>Edit Event</h2>
+                            <form method="POST" action="{% url 'event_edit' event.id %}" id="editEventForm">
+                                {% csrf_token %}
+                                <input type="hidden" name="event_id" id="editEventId">
+                                <div>
+                                    <label for="editEventTitle">Title:</label>
+                                    <input type="text" id="editEventTitle" name="title" required>
+                                </div>
+                                <div>
+                                    <label for="editEventDate">Date:</label>
+                                    <input type="date" id="editEventDate" name="date" required>
+                                </div>
+                                <div>
+                                    <label for="editEventTime">Time:</label>
+                                    <input type="text" id="editEventTime" name="time" required>
+                                </div>
+                                <div>
+                                    <label for="editEventDescription">Description:</label>
+                                    <textarea id="editEventDescription" name="description" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Event</button>
+                                <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                {% empty %}
+                    <p>No upcoming events.</p>
+                {% endfor %}
+            </div>
+            {% if 'create' in user_permissions %}
+                <div id="create-event-form">
+                    <h2>Create New Event</h2>
+                    <form action="{% url 'event_create' %}" method="post">
+                        {% csrf_token %}
+                        <label for="title">Title:</label>
+                        <input type="text" id="title_create" name="title" required>
+                        <label for="date">Date:</label>
+                        <input type="date" id="date_create" name="date" required>
+                        <label for="time">Time:</label>
+                        <input type="text" id="time_create" name="time" required>
+                        <label for="description">Description:</label>
+                        <textarea id="description_create" name="description" required></textarea>
+                        <button type="submit" class="btn btn-primary">Create Event</button>
+                    </form>
+                </div>
+            {% endif %}
+        </section>
+        <section class="announcements-section">
+            <h2>Announcements</h2>
+            <div id="announcements-container">
+                {% for announcement in recent_announcements %}
+                    <div class="announcement-card">
+                        <h3>{{ announcement.title }}</h3>
+                        <p><strong>Date:</strong> {{ announcement.date }}</p>
+                        <p><strong>Details:</strong> {{ announcement.details }}</p>
+                    </div>
+                {% empty %}
+                    <p>No recent announcements.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function openEditModal(eventId, eventTitle, eventDate, eventTime, eventDescription) {
+            document.getElementById('editEventId').value = eventId;
+            document.getElementById('editEventTitle').value = eventTitle;
+            document.getElementById('editEventDate').value = eventDate;
+            document.getElementById('editEventTime').value = eventTime;
+            document.getElementById('editEventDescription').value = eventDescription;
+            document.getElementById('editEventModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editEventModal').style.display = 'none';
+        }
+    </script>
+
+
+    <!-- JavaScript -->
+    <script src="{% static 'employee_management/js/events.js' %}"></script>
+
+{% endblock %}

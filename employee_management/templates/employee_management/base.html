@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Project{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'employee_management/css/base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="{% static 'employee_management/assets/codefulcrum_logo.jpeg' %}" alt="Company Logo" class="company-logo">
+                <span class="company-name">Code Fulcrum</span>
+            </div>
+            <nav class="main-menu">
+                <ul>
+                    <li><a href="/employee_management/">Home</a></li>
+                    <li><a href="/employee_management/events">Events</a></li>
+                    <li><a href="/employee_management/leaves">Leaves</a></li>
+                    <li><a href="/employee_management/profile">Profile</a></li>
+                    <li><a href="/employee_management/users">Users</a></li>
+                    <li><a href="/employee_management/manage_leaves">Mng Leaves</a></li>
+                    <li><a href="/employee_management/manage_lunch_menu">Mng Lunch</a></li>
+                    <li><a href="/employee_management/projects">Projects</a></li>
+                    <li><a href="/employee_management/feedback">Feedback</a></li>
+                </ul>
+            </nav>
+<!--            <div class="navbar-heading">-->
+<!--                <span>Welcome to Dashboard</span>-->
+<!--            </div>-->
+            <div class="profile-icon-container">
+                <div class="employee-name" id="employee-name">
+                    {{ employee_name }}
+                </div>
+                <i class="fas fa-user-circle profile-icon" id="profile-icon"></i>
+                <nav class="profile-menu" id="profile-menu">
+                    <ul>
+                        <li><a href="/employee_management/profile">Update Profile</a></li>
+                        <li><a href="/employee_management/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <p>&copy; 2024 Code Fulcrum. All rights reserved.</p>
+            </div>
+            <div class="footer-right">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('profile-icon').addEventListener('click', function() {
+            var menu = document.getElementById('profile-menu');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
