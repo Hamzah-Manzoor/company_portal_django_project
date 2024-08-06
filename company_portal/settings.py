@@ -40,6 +40,11 @@ INSTALLED_APPS = [
     'employee_management',
     'rest_framework',
     'corsheaders',
+    'events',
+    'leaves',
+    'users',
+    'lunch',
+    'projects',
 ]
 
 MIDDLEWARE = [
