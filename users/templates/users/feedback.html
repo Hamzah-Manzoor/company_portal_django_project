@@ -4,7 +4,7 @@
 
 {% block head %}
 {% load static %}
-    <link rel="stylesheet" href="{% static 'employee_management/css/feedback.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/feedback.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,6 +13,16 @@
     <hr class="divider">
 
     <main class="main-section">
+
+        {% if messages %}
+            <div class="error-messages">
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <p style="color: red;" class="error">{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <div class="feedback-container">
             <h1>Manage Feedback</h1>

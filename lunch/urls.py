@@ -4,6 +4,8 @@ from django.urls import path
 # from .views import user_list  # user_detail, user_edit, user_delete, user_create
 from . import views
 
+# app_name = 'lunch'
+
 urlpatterns = [
     path('', views.manage_lunch_menu, name='manage_lunch_menu'),
     path('update_admin/', views.update_admin, name='admin_update'),

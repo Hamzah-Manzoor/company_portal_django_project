@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from .models import Project
-from employee_management.models import Employees
+from users.models import Employees
 from events.models import Events, Announcements
 from leaves.models import AllocatedLeaves, LeavesTaken
 from lunch.models import LunchMenu, Admin
@@ -15,17 +15,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from employee_management.const import role_permissions
+from employee_management.const import *
 from django.db import IntegrityError
 from django.views.decorators.http import require_POST
-
-
-import logging
-
-logger = logging.getLogger(__name__)
-
-# Create your views here.
-
+from employee_management.utils import check_permission
 
 
 @login_required
@@ -55,12 +48,13 @@ def manage_projects(request):
 
 
 @login_required
+@check_permission('Projects', 'create')
 def add_project(request):
     user_role = request.user.role
     if 'create' not in role_permissions.get(user_role, {}).get('Projects', []):
         return redirect('manage_projects')
 
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         project_name = request.POST.get('project_name')
         stack = request.POST.get('stack')
         team_members = request.POST.getlist('team_members')
@@ -81,6 +75,7 @@ def add_project(request):
 
 
 @login_required
+@check_permission('Projects', 'update')
 def edit_project(request, project_id):
     user_role = request.user.role
     if 'update' not in role_permissions.get(user_role, {}).get('Projects', []):
@@ -88,7 +83,7 @@ def edit_project(request, project_id):
 
     project = get_object_or_404(Project, id=project_id)
 
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         project.name = request.POST.get('project_name')
         project.stack = request.POST.get('stack')
         team_members = request.POST.getlist('team_members')
@@ -100,6 +95,7 @@ def edit_project(request, project_id):
 
 
 @login_required
+@check_permission('Projects', 'delete')
 def delete_project(request, project_id):
     user_role = request.user.role
     if 'delete' not in role_permissions.get(user_role, {}).get('Projects', []):

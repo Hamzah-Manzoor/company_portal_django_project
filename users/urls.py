@@ -4,6 +4,7 @@ from .views import profile
 # from .views import user_list  # user_detail, user_edit, user_delete, user_create
 from . import views
 
+# app_name = 'users'
 
 urlpatterns = [
     path('profile/', profile, name='profile'),

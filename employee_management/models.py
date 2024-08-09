@@ -2,65 +2,65 @@ from django.db import models
 
 # Create your models here.
 
-from django.db import models
-from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from lunch.models import LunchMenu
-
-
-class EmployeesManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        return self.create_user(email, password, **extra_fields)
-
-
-class Employees(AbstractBaseUser, PermissionsMixin):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
-    position = models.CharField(max_length=255, blank=True, null=True)
-    date_of_joining = models.DateField(blank=True, null=True)
-    birthdate = models.DateField(blank=True, null=True)
-    annual_leaves_taken = models.IntegerField(default=0)
-    casual_leaves_taken = models.IntegerField(default=0)
-    medical_leaves_taken = models.IntegerField(default=0)
-    unpaid_leaves_taken = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    last_login = models.DateTimeField(null=True, blank=True)
-    role = models.CharField(max_length=255, choices=[
-        ('CEO', 'CEO'),
-        ('CTO', 'CTO'),
-        ('S-HR', 'Senior HR'),
-        ('J-HR', 'Junior HR'),
-        ('Project Manager', 'Project Manager'),
-        ('Team Lead', 'Team Lead'),
-        ('Employee', 'Employee')
-    ], default='Employee')
-
-    objects = EmployeesManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    class Meta:
-        db_table = 'Employees'
-
-    def __str__(self):
-        return self.email
+# from django.db import models
+# from django.utils import timezone
+# from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+# from lunch.models import LunchMenu
+#
+#
+# class EmployeesManager(BaseUserManager):
+#     def create_user(self, email, password=None, **extra_fields):
+#         if not email:
+#             raise ValueError('The Email field must be set')
+#         email = self.normalize_email(email)
+#         user = self.model(email=email, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
+#
+#     def create_superuser(self, email, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+#
+#         return self.create_user(email, password, **extra_fields)
+#
+#
+# class Employees(AbstractBaseUser, PermissionsMixin):
+#     id = models.AutoField(primary_key=True)
+#     name = models.CharField(max_length=255)
+#     email = models.EmailField(max_length=255, unique=True)
+#     password = models.CharField(max_length=255)
+#     position = models.CharField(max_length=255, blank=True, null=True)
+#     date_of_joining = models.DateField(blank=True, null=True)
+#     birthdate = models.DateField(blank=True, null=True)
+#     annual_leaves_taken = models.IntegerField(default=0)
+#     casual_leaves_taken = models.IntegerField(default=0)
+#     medical_leaves_taken = models.IntegerField(default=0)
+#     unpaid_leaves_taken = models.IntegerField(default=0)
+#     is_active = models.BooleanField(default=True)
+#     is_staff = models.BooleanField(default=False)
+#     is_superuser = models.BooleanField(default=False)
+#     last_login = models.DateTimeField(null=True, blank=True)
+#     role = models.CharField(max_length=255, choices=[
+#         ('CEO', 'CEO'),
+#         ('CTO', 'CTO'),
+#         ('S-HR', 'Senior HR'),
+#         ('J-HR', 'Junior HR'),
+#         ('Project Manager', 'Project Manager'),
+#         ('Team Lead', 'Team Lead'),
+#         ('Employee', 'Employee')
+#     ], default='Employee')
+#
+#     objects = EmployeesManager()
+#
+#     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = []
+#
+#     class Meta:
+#         db_table = 'Employees'
+#
+#     def __str__(self):
+#         return self.email
 
 
 # class LeavesTaken(models.Model):
@@ -155,17 +155,17 @@ class Employees(AbstractBaseUser, PermissionsMixin):
 #         return f'FridayIterator: {self.friday_lunch_iterator}, WeekdayIterator: {self.weekday_lunch_iterator}, LunchTime: {self.lunch_time}'
 
 
-class LunchReview(models.Model):
-    date = models.DateField(default=timezone.now)
-    lunch_menu = models.ForeignKey(LunchMenu, on_delete=models.CASCADE)
-    likes = models.JSONField(default=list, blank=True)
-    dislikes = models.JSONField(default=list, blank=True)
-
-    class Meta:
-        db_table = 'lunch_review'
-
-    def __str__(self):
-        return f'Date: {self.date}, Menu: {self.lunch_menu}, Likes: {len(self.likes)}, Dislikes: {len(self.dislikes)}'
+# class LunchReview(models.Model):
+#     date = models.DateField(default=timezone.now)
+#     lunch_menu = models.ForeignKey(LunchMenu, on_delete=models.CASCADE)
+#     likes = models.JSONField(default=list, blank=True)
+#     dislikes = models.JSONField(default=list, blank=True)
+#
+#     class Meta:
+#         db_table = 'lunch_review'
+#
+#     def __str__(self):
+#         return f'Date: {self.date}, Menu: {self.lunch_menu}, Likes: {len(self.likes)}, Dislikes: {len(self.dislikes)}'
 
 
 # class Project(models.Model):
@@ -181,7 +181,7 @@ class LunchReview(models.Model):
 
 
 # class Feedback(models.Model):
-#     employee = models.ForeignKey(Employees, on_delete=models.CASCADE)
+#     employee = models.ForeignKey(Employees, on_deleshow te=models.CASCADE)
 #     feedback = models.TextField()
 #
 #     def __str__(self):

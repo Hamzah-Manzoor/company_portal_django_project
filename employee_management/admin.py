@@ -2,13 +2,40 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from leaves.models import AllocatedLeaves
 
+from users.models import *
+from projects.models import *
+from lunch.models import *
+from leaves.models import *
+from events.models import *
+
+# admin.site.register(Employees)
+admin.site.register(Position)
+# admin.site.register(Employees)
+
+admin.site.register(Project)
+
+admin.site.register(LunchMenu)
+admin.site.register(Admin)
+admin.site.register(LunchReview)
+
+admin.site.register(LeavesTaken)
 admin.site.register(AllocatedLeaves)
+
+admin.site.register(Events)
+admin.site.register(Announcements)
+
+admin.site.register(Feedback)
+
+
+
+
+
+
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Employees
+from users.models import Employees
 
 
 class EmployeeAdmin(UserAdmin):

@@ -4,6 +4,8 @@ from django.urls import path
 # from .views import user_list  # user_detail, user_edit, user_delete, user_create
 from . import views
 
+# app_name = 'projects'
+
 urlpatterns = [
     path('', views.manage_projects, name='manage_projects'),
     path('add/', views.add_project, name='add_project'),

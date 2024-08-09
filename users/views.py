@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Employees, Feedback
+from .models import Employees, Feedback, Position
 from events.models import Events, Announcements
 from leaves.models import AllocatedLeaves, LeavesTaken
 from lunch.models import LunchMenu, Admin
@@ -15,17 +15,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from employee_management.const import role_permissions
+from employee_management.const import *
 from employee_management.forms import UserCreationForm
 from django.db import IntegrityError
 from django.views.decorators.http import require_POST
-
-
-import logging
-
-logger = logging.getLogger(__name__)
-
-# Create your views here.
+from functools import wraps
+from employee_management.utils import check_permission
 
 
 @login_required
@@ -34,7 +29,7 @@ def profile(request):
     employee = get_object_or_404(Employees, id=employee_id)
     employee_name = request.user.name
 
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         name = request.POST.get('name')
         birthdate = request.POST.get('birthdate')
 
@@ -57,17 +52,36 @@ def user_list(request):
 
     user_permissions = role_permissions.get(user_role, {}).get('Users', [])
 
+    positions = Position.objects.all()
+
     context = {
         'users': users,
         'user_permissions': user_permissions,
-        'employee_name': employee_name
+        'employee_name': employee_name,
+        'positions': positions,
     }
     return render(request, 'users/users.html', context)
 
 
+# def check_permission(permission):
+#     def decorator(view_func):
+#         @wraps(view_func)
+#         def _wrapped_view(request, *args, **kwargs):
+#             user_role = request.user.role
+#             user_permissions = role_permissions.get(user_role, {}).get('Users', [])
+#             if permission in user_permissions:
+#                 return view_func(request, *args, **kwargs)
+#             else:
+#                 messages.error(request, 'You do not have permission to perform this action.')
+#                 return redirect(reverse('user_list'))
+#         return _wrapped_view
+#     return decorator
+
+
 @login_required()
+@check_permission('Users', 'create')
 def users_create(request):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         email = request.POST.get('email')
         password = request.POST.get('password')
 
@@ -92,24 +106,59 @@ def user_detail(request, id):
 
 
 @login_required
+@check_permission('Users', 'update')
 def user_update(request):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         user_id = request.POST.get('user_id')
         user = get_object_or_404(Employees, id=user_id)
         user.name = request.POST.get('name')
-        user.position = request.POST.get('position')
+
+        position_id = request.POST.get('position')
+        position = get_object_or_404(Position, id=position_id)
+        user.position = position
+
         user.save()
         return redirect(reverse('user_list'))
 
 
 @login_required
+@check_permission('Users', 'delete')
 def users_delete(request, id):
     user = get_object_or_404(Employees, id=id)
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         user.delete()
         return redirect(reverse('user_list'))
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
+def get_permissions(role, category):
+    return role_permissions.get(role, {}).get(category, [])
+
+
+def get_permission_dict(role, category):
+    permissions = get_permissions(role, category)
+    return {
+        'create': 'create' in permissions,
+        'read': 'read' in permissions,
+        'update': 'update' in permissions,
+        'delete': 'delete' in permissions,
+    }
+
+
+# def check_feedback_permission(permission):
+#     def decorator(view_func):
+#         @wraps(view_func)
+#         def _wrapped_view(request, *args, **kwargs):
+#             user_role = request.user.role
+#             permissions = get_permissions(user_role, 'Feedback')
+#             if permission in permissions:
+#                 return view_func(request, *args, **kwargs)
+#             else:
+#                 messages.error(request, 'You do not have permission to perform this action.')
+#                 return redirect(reverse('manage_feedback'))
+#         return _wrapped_view
+#     return decorator
 
 
 @login_required
@@ -129,12 +178,7 @@ def manage_feedback(request):
         'user': user,
         'employee_name': employee_name,
         'perms': {
-            'feedback': {
-                'create': 'create' in permissions,
-                'read': 'read' in permissions,
-                'update': 'update' in permissions,
-                'delete': 'delete' in permissions,
-            }
+            'feedback': get_permission_dict(role, 'Feedback')
         }
     }
 
@@ -142,11 +186,9 @@ def manage_feedback(request):
 
 
 @login_required
+@check_permission('Feedback', 'create')
 def add_feedback(request):
-    print("-----------------------------------------")
-    print("You are in add feedback")
-    print("-----------------------------------------")
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         employee_id = request.POST.get("employee_id")
         feedback_text = request.POST.get('feedback')
 
@@ -172,12 +214,7 @@ def add_feedback(request):
                 'employee_name': employee_name,
                 'error_message': 'Failed to add feedback. Please ensure the Employee ID is valid.',
                 'perms': {
-                    'feedback': {
-                        'create': 'create' in permissions,
-                        'read': 'read' in permissions,
-                        'update': 'update' in permissions,
-                        'delete': 'delete' in permissions,
-                    }
+                    'feedback': get_permission_dict(role, 'Feedback')
                 }
             }
 
@@ -187,9 +224,10 @@ def add_feedback(request):
 
 
 @login_required
+@check_permission('Feedback', 'update')
 def edit_feedback(request, feedback_id):
     feedback = get_object_or_404(Feedback, id=feedback_id)
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         feedback.feedback = request.POST.get('feedback')
         feedback.save()
         return redirect('manage_feedback')
@@ -197,9 +235,10 @@ def edit_feedback(request, feedback_id):
 
 
 @login_required
+@check_permission('Feedback', 'delete')
 def delete_feedback(request, feedback_id):
     feedback = get_object_or_404(Feedback, id=feedback_id)
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         feedback.delete()
         return redirect('manage_feedback')
     return redirect('manage_feedback')

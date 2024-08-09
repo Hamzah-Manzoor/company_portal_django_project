@@ -1,9 +1,10 @@
 from django.db import models
+from employee_management.mixins import TrackingMixin
 
 # Create your models here.
 
 
-class Events(models.Model):
+class Events(TrackingMixin, models.Model):
     title = models.CharField(max_length=255)
     date = models.DateField()
     time = models.CharField(max_length=50)

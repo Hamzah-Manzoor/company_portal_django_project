@@ -4,6 +4,8 @@ from .views import events
 # from .views import user_list  # user_detail, user_edit, user_delete, user_create
 from . import views
 
+# app_name = 'events'
+
 urlpatterns = [
     path('', events, name='events'),
     path('create/', views.event_create, name='event_create'),

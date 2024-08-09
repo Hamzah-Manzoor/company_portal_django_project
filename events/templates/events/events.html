@@ -4,7 +4,7 @@
 
 {% block head %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'employee_management/css/events.css' %}">
+<link rel="stylesheet" href="{% static 'events/css/events.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -24,6 +24,8 @@
                         <p><strong>Date:</strong> {{ event.date }}</p>
                         <p><strong>Time:</strong> {{ event.time }}</p>
                         <p><strong>Details:</strong> {{ event.description }}</p>
+                        <p><strong>Created by:</strong> User with ID {{ event.created_by_id }} on {{ event.created_at }}</p>
+                        <p><strong>Last updated by:</strong> User with ID {{ event.updated_by_id }} on {{ event.updated_at }}</p>
                         <!-- Edit Button -->
                         {% if 'update' in user_permissions %}
                             <button class="btn btn-success" onclick="openEditModal('{{ event.id }}', '{{ event.title }}', '{{ event.date }}', '{{ event.time }}', '{{ event.description }}')">Edit</button>
@@ -122,6 +124,6 @@
 
 
     <!-- JavaScript -->
-    <script src="{% static 'employee_management/js/events.js' %}"></script>
+    <script src="{% static 'events/js/events.js' %}"></script>
 
 {% endblock %}

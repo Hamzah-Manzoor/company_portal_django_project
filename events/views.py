@@ -10,14 +10,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from employee_management.const import role_permissions
+from employee_management.const import *
 from django.db import IntegrityError
 from django.views.decorators.http import require_POST
+from employee_management.utils import check_permission
 
-
-import logging
-
-logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -40,20 +37,29 @@ def events(request):
 
 
 @login_required
+@check_permission('Events', 'create')
 def event_create(request):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         title = request.POST.get('title')
         date = request.POST.get('date')
         time = request.POST.get('time')
         description = request.POST.get('description')
-        Events.objects.create(title=title, date=date, time=time, description=description)
+        Events.objects.create(
+            title=title,
+            date=date,
+            time=time,
+            description=description,
+            created_by=request.user,
+            updated_by=request.user
+        )
         return redirect('events')
     return render(request, 'events/event_form.html')
 
 
 @login_required
+@check_permission('Events', 'update')
 def event_edit(request, event_id):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         event = get_object_or_404(Events, id=event_id)
         title = request.POST.get('title')
         date = request.POST.get('date')
@@ -64,6 +70,7 @@ def event_edit(request, event_id):
             event.date = date
             event.time = time
             event.description = description
+            event.updated_by = request.user
             event.save()
             return redirect('events')
         else:
@@ -75,8 +82,9 @@ def event_edit(request, event_id):
 
 
 @login_required
+@check_permission('Events', 'delete')
 def event_delete(request, event_id):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         event = get_object_or_404(Events, id=event_id)
         event.delete()
         return redirect('events')

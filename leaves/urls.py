@@ -4,6 +4,8 @@ from .views import leaves
 # from .views import user_list  # user_detail, user_edit, user_delete, user_create
 from . import views
 
+# app_name = 'leaves'
+
 urlpatterns = [
     path('', views.manage_leaves, name='manage_leaves'),
     path('create/', views.create_leave, name='leave_create'),

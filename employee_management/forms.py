@@ -2,7 +2,7 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Employees
+from users.models import Employees
 from django.contrib.auth import get_user_model
 
 

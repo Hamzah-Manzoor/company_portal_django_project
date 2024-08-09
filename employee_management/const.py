@@ -63,3 +63,5 @@ role_permissions = {
         'Feedback': ['read']
     }
 }
+
+HTTP_METHOD_POST = 'POST'

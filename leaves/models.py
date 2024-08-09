@@ -1,10 +1,12 @@
 from django.db import models
+from employee_management.mixins import TrackingMixin
 
 # Create your models here.
-from employee_management.models import Employees
+from users.models import Employees
+from users.models import Position
 
 
-class LeavesTaken(models.Model):
+class LeavesTaken(TrackingMixin, models.Model):
     employee_id = models.ForeignKey(Employees, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -20,8 +22,8 @@ class LeavesTaken(models.Model):
         return f'{self.employee_id.name} - {self.leave_type} from {self.start_date} to {self.end_date}'
 
 
-class AllocatedLeaves(models.Model):
-    designation = models.CharField(max_length=255)
+class AllocatedLeaves(TrackingMixin, models.Model):
+    designation = models.ForeignKey(Position, on_delete=models.CASCADE, unique=True)
     annual_leaves = models.IntegerField()
     casual_leaves = models.IntegerField()
     medical_leaves = models.IntegerField()
@@ -30,7 +32,7 @@ class AllocatedLeaves(models.Model):
         db_table = 'AllocatedLeaves'
 
     def __str__(self):
-        return self.designation
+        return self.designation.name
 
     def update_leaves(self, designation, annual_leaves, casual_leaves, medical_leaves):
         self.designation = designation

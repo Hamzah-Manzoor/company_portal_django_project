@@ -13,14 +13,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from employee_management.const import role_permissions
+from employee_management.const import *
 from django.db import IntegrityError
 from django.views.decorators.http import require_POST
+from employee_management.utils import check_permission
 
-
-import logging
-
-logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -50,7 +47,7 @@ def manage_lunch_menu(request):
 
 @login_required
 def update_admin(request):
-    if request.method == 'POST' and 'update' in role_permissions[request.user.role]['Lunch Menu']:
+    if request.method == HTTP_METHOD_POST and 'update' in role_permissions[request.user.role]['Lunch Menu']:
         admin = Admin.objects.first()
         admin.friday_lunch_iterator = request.POST['friday_lunch_iterator']
         admin.weekday_lunch_iterator = request.POST['weekday_lunch_iterator']
@@ -60,8 +57,9 @@ def update_admin(request):
 
 
 @login_required
+@check_permission('Lunch Menu', 'create')
 def lunch_menu_create(request):
-    if request.method == 'POST' and 'create' in role_permissions[request.user.role]['Lunch Menu']:
+    if request.method == HTTP_METHOD_POST and 'create' in role_permissions[request.user.role]['Lunch Menu']:
         dish_name = request.POST['dish_name']
         LunchMenu.objects.create(dish_name=dish_name)
         return redirect(reverse('manage_lunch_menu'))
@@ -69,8 +67,9 @@ def lunch_menu_create(request):
 
 
 @login_required
+@check_permission('Lunch Menu', 'update')
 def update_lunch_menu(request):
-    if request.method == 'POST' and 'update' in role_permissions[request.user.role]['Lunch Menu']:
+    if request.method == HTTP_METHOD_POST and 'update' in role_permissions[request.user.role]['Lunch Menu']:
         dish_id = request.POST['dish_id']
         dish_name = request.POST['dish_name']
         dish = LunchMenu.objects.get(id=dish_id)
@@ -80,8 +79,9 @@ def update_lunch_menu(request):
 
 
 @login_required
+@check_permission('Lunch Menu', 'delete')
 def delete_lunch_menu(request):
-    if request.method == 'POST' and 'delete' in role_permissions[request.user.role]['Lunch Menu']:
+    if request.method == HTTP_METHOD_POST and 'delete' in role_permissions[request.user.role]['Lunch Menu']:
         dish_id = request.POST['dish_id']
         LunchMenu.objects.filter(id=dish_id).delete()
     return redirect('manage_lunch_menu')

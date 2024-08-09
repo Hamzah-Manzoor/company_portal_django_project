@@ -1,5 +1,5 @@
 from django.db import models
-from employee_management.models import Employees
+from users.models import Employees
 
 # Create your models here.
 
@@ -10,7 +10,7 @@ class Project(models.Model):
     team_members = models.ManyToManyField(Employees)
 
     class Meta:
-        db_table = 'projects'
+        db_table = 'Projects'
 
     def __str__(self):
         return self.name

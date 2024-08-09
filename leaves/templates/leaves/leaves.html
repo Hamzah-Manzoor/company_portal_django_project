@@ -4,7 +4,7 @@
 
 {% block head %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'employee_management/css/leaves.css' %}">
+<link rel="stylesheet" href="{% static 'leaves/css/leaves.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
     <!-- Main Section -->
     <main class="main-section">
         <h1>Apply for Leave</h1>
-        <form id="leave-form" method="post" action="{% url 'leaves' %}">
+        <form id="leave-form" method="post" action="{% url 'apply_leaves' %}">
             {% csrf_token %}
             <label for="employee-name">Employee Name:</label>
             <input type="text" id="employee-name" name="employee-name" value="{{ employee.name }}" readonly style="background-color: lightgray;">
@@ -53,7 +53,7 @@
     
 
     <!-- JavaScript -->
-    <script src="{% static 'employee_management/js/leaves.js' %}"></script>
+    <script src="{% static 'leaves/js/leaves.js' %}"></script>
 
     <!-- This is the code to add an entry for leave -->
     <script>
@@ -73,7 +73,7 @@
                 const formData = new FormData(leaveForm);
                 const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
-                fetch("{% url 'leaves' %}", {
+                fetch("{% url 'apply_leaves' %}", {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': csrfToken,

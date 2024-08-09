@@ -3,10 +3,10 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
-from .models import Employees, LunchReview
+from users.models import Employees
 from events.models import Events, Announcements
 from leaves.models import AllocatedLeaves, LeavesTaken
-from lunch.models import LunchMenu, Admin
+from lunch.models import LunchMenu, Admin, LunchReview
 from projects.models import Project
 from django.utils import timezone
 from datetime import date, timedelta, datetime
@@ -16,15 +16,10 @@ from .forms import SignUpForm, LoginForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from .const import role_permissions
+from .const import *
 from .forms import UserCreationForm
 from django.db import IntegrityError
 from django.views.decorators.http import require_POST
-
-
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -46,10 +41,10 @@ def index(request):
 
     # Calculate upcoming birthdays
     today = date.today()
-    future_date = today + timedelta(days=150)
+    future_date = today + timedelta(days=10)
     upcoming_birthdays = [
         employee for employee in employees
-        if today <= (employee.birthdate.replace(year=today.year) if employee.birthdate.replace(year=today.year) >= today else employee.birthdate.replace(year=today.year + 1)) <= future_date
+        if today <= (employee.birthdate.replace(year=today.year) if employee.birthdate.replace(year=today.year) >= today else employee.birthdate.replace(year=today.year + 1))
     ]
     upcoming_birthdays = sorted(upcoming_birthdays, key=lambda x: x.birthdate.replace(year=today.year))[:5]
 
@@ -101,7 +96,7 @@ def index(request):
         'disliked': disliked,
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'employee_management/index.html', context)
 
 
 @login_required
@@ -111,7 +106,7 @@ def like_lunch(request):
 
     user_id = request.user.id
 
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         if 'like' in request.POST:
             if user_id in lunch_review.likes:
                 lunch_review.likes.remove(user_id)
@@ -358,7 +353,7 @@ def like_lunch(request):
 
 
 def signup(request):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
@@ -369,7 +364,7 @@ def signup(request):
 
 
 def login(request):
-    if request.method == 'POST':
+    if request.method == HTTP_METHOD_POST:
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('email')

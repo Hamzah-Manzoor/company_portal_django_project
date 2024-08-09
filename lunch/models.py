@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -19,7 +20,20 @@ class Admin(models.Model):
     lunch_time = models.TimeField(default="15:00:00")  # Assuming default lunch time
 
     class Meta:
-        db_table = 'admin'
+        db_table = 'Admin'
 
     def __str__(self):
         return f'FridayIterator: {self.friday_lunch_iterator}, WeekdayIterator: {self.weekday_lunch_iterator}, LunchTime: {self.lunch_time}'
+
+
+class LunchReview(models.Model):
+    date = models.DateField(default=timezone.now)
+    lunch_menu = models.ForeignKey(LunchMenu, on_delete=models.CASCADE)
+    likes = models.JSONField(default=list, blank=True)
+    dislikes = models.JSONField(default=list, blank=True)
+
+    class Meta:
+        db_table = 'LunchReview'
+
+    def __str__(self):
+        return f'Date: {self.date}, Menu: {self.lunch_menu}, Likes: {len(self.likes)}, Dislikes: {len(self.dislikes)}'
