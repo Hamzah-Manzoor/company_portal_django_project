@@ -37,7 +37,9 @@ def index(request):
     recent_announcements = Announcements.objects.filter(date__lt=timezone.now()).order_by('-date')[:2]
 
     # Fetch leaves for the logged employee
-    allocated_leaves = AllocatedLeaves.objects.get(designation=logged_employee.position)
+    my_employee = Employees.objects.get(id=2)
+    allocated_leaves = AllocatedLeaves.objects.get(designation=my_employee.position)
+    # allocated_leaves = AllocatedLeaves.objects.get(designation=logged_employee.position)
 
     # Calculate upcoming birthdays
     today = date.today()

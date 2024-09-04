@@ -4,7 +4,440 @@
 
 {% block head %}
 {% load static %}
+<!--<link rel="stylesheet" href="{% static '/employee_management/css/index.css' %}">-->
 <link rel="stylesheet" href="{% static 'employee_management/css/index.css' %}">
+<!--<link rel="stylesheet" href="/employee_management/static/employee_management/css/index.css">-->
+<!--<style>-->
+<!--    /* Divider */-->
+<!--.divider {-->
+<!--    border: none;-->
+<!--    height: 1px;-->
+<!--    background-color: #ddd;-->
+<!--    margin: 0;-->
+<!--}-->
+
+<!--/* Hero Section */-->
+<!--.hero-section {-->
+<!--    display: flex;-->
+<!--    justify-content: center;-->
+<!--    align-items: center;-->
+<!--    /* background-color: #0073e6; */-->
+<!--    background-color: #296198;-->
+<!--    padding: 20px;-->
+<!--    color: white;-->
+<!--    position: relative;-->
+<!--    height: 26.25vw; /* Maintain 16:9 aspect ratio using vw units */-->
+<!--    overflow: hidden;-->
+<!--}-->
+
+<!--@media (max-width: 767px) {-->
+<!--    /* Hero Section */-->
+<!--    .hero-section {-->
+<!--        display: flex;-->
+<!--        justify-content: center;-->
+<!--        align-items: center;-->
+<!--        background-color: #296198;-->
+<!--        padding: 20px;-->
+<!--        color: white;-->
+<!--        position: relative;-->
+<!--        height: 56.25vw; /* Adjust height as needed */-->
+<!--        overflow: hidden;-->
+<!--    }-->
+<!--}-->
+
+
+<!--.slider {-->
+<!--    display: flex;-->
+<!--    justify-content: center;-->
+<!--    align-items: center;-->
+<!--    width: 100%;-->
+<!--    height: 100%;-->
+<!--    position: relative;-->
+<!--}-->
+
+<!--.slide {-->
+<!--    transition: transform 0.5s ease, opacity 0.5s ease;-->
+<!--    position: absolute;-->
+<!--    width: 100%;-->
+<!--    height: 100%;-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--    justify-content: center;-->
+<!--    align-items: center;-->
+<!--}-->
+
+<!--.slide img {-->
+<!--    width: 100%;-->
+<!--    height: auto;-->
+<!--    border-radius: 10px;-->
+<!--}-->
+
+<!--@media (min-width: 768px) {-->
+<!--    .slide {-->
+<!--        opacity: 0;-->
+<!--        transform: scale(0.5);-->
+<!--    }-->
+
+<!--    .slide.active {-->
+<!--        opacity: 1;-->
+<!--        transform: scale(0.5);-->
+<!--        z-index: 1;-->
+<!--    }-->
+
+<!--    .slide.left {-->
+<!--        transform: translateX(-30%) scale(0.25);-->
+<!--        opacity: 1;-->
+<!--    }-->
+
+<!--    .slide.right {-->
+<!--        transform: translateX(30%) scale(0.25);-->
+<!--        opacity: 1;-->
+<!--    }-->
+<!--}-->
+
+<!--@media (max-width: 767px) {-->
+<!--    .slide.active {-->
+<!--        opacity: 1;-->
+<!--        transform: translateX(0);-->
+<!--    }-->
+
+<!--    .slide {-->
+<!--        transform: translateX(100%);-->
+<!--    }-->
+
+<!--    .slide:not(.active) {-->
+<!--        opacity: 0;-->
+<!--        transform: translateX(-100%);-->
+<!--    }-->
+<!--}-->
+
+<!--.controls {-->
+<!--    position: absolute;-->
+<!--    top: 50%;-->
+<!--    width: 100%;-->
+<!--    display: flex;-->
+<!--    justify-content: space-between;-->
+<!--    transform: translateY(-50%);-->
+<!--}-->
+
+<!--.controls button {-->
+<!--    background-color: rgba(0, 0, 0, 0.5);-->
+<!--    border: none;-->
+<!--    color: white;-->
+<!--    font-size: 18px;-->
+<!--    padding: 10px;-->
+<!--    cursor: pointer;-->
+<!--}-->
+
+<!--/* Cards Section */-->
+<!--.cards-section {-->
+<!--    display: grid;-->
+<!--    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));-->
+<!--    gap: 20px;-->
+<!--    padding: 20px;-->
+<!--}-->
+
+<!--.card {-->
+<!--    background-color: white;-->
+<!--    padding: 20px;-->
+<!--    border-radius: 10px;-->
+<!--    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);-->
+<!--    transition: transform 0.2s;-->
+<!--}-->
+
+<!--.card:hover {-->
+<!--    transform: scale(1.02);-->
+<!--}-->
+
+<!--.card h2 {-->
+<!--    margin-top: 0;-->
+<!--    color: #0073e6;-->
+<!--}-->
+
+<!--.card button {-->
+<!--    background-color: #0073e6;-->
+<!--    color: white;-->
+<!--    border: none;-->
+<!--    padding: 10px 20px;-->
+<!--    border-radius: 5px;-->
+<!--    cursor: pointer;-->
+<!--    display: block;-->
+<!--    margin: 20px auto 0; /* Center-align the button */-->
+<!--}-->
+
+<!--.card button:hover {-->
+<!--    background-color: #005bb5;-->
+<!--}-->
+
+<!--/* Events and Announcements Sections */-->
+<!--.events-section,-->
+<!--.announcements-section {-->
+<!--    margin-bottom: 20px;-->
+<!--}-->
+
+<!--.events-section h3,-->
+<!--.announcements-section h3 {-->
+<!--    color: #0073e6;-->
+<!--    margin-bottom: 10px;-->
+<!--}-->
+
+<!--.events-section ul,-->
+<!--.announcements-section ul {-->
+<!--    padding: 0;-->
+<!--}-->
+
+<!--.events-section ul li,-->
+<!--.announcements-section ul li {-->
+<!--    margin-bottom: 15px;-->
+<!--    padding-left: 30px;-->
+<!--    position: relative;-->
+<!--    list-style: none;-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--.events-section ul li:before,-->
+<!--.announcements-section ul li:before {-->
+<!--    content: "\2022"; /* Bullet character */-->
+<!--    position: absolute;-->
+<!--    left: 0;-->
+<!--    color: #0073e6;-->
+<!--    font-size: 20px;-->
+<!--    line-height: 1;-->
+<!--    top: 50%;-->
+<!--    transform: translateY(-50%);-->
+<!--}-->
+
+<!--.announcements-section ul li {-->
+<!--    margin-bottom: 15px;-->
+<!--    padding-left: 30px;-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--.announcements-section ul li:before {-->
+<!--    content: "\2022"; /* Bullet character */-->
+<!--    position: absolute;-->
+<!--    left: 0;-->
+<!--    color: #0073e6;-->
+<!--    font-size: 20px;-->
+<!--    line-height: 1;-->
+<!--    top: 50%;-->
+<!--    transform: translateY(-50%);-->
+<!--}-->
+
+<!--/* Center align View All Events button */-->
+<!--.cards-section .view-all-events {-->
+<!--    text-align: center;-->
+<!--    margin-top: 20px;-->
+<!--}-->
+
+<!--.cards-section .view-all-events button {-->
+<!--    background-color: #0073e6;-->
+<!--    color: white;-->
+<!--    border: none;-->
+<!--    padding: 10px 20px;-->
+<!--    border-radius: 5px;-->
+<!--    cursor: pointer;-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--.cards-section .view-all-events button:hover {-->
+<!--    background-color: #005bb5;-->
+<!--}-->
+
+<!--/* Annual Leave Details Card */-->
+<!--.annual-leaves-card {-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--    justify-content: space-between;-->
+<!--    /* height: 100%; */-->
+<!--}-->
+
+<!--.annual-leaves-card .leave-details {-->
+<!--    flex: 1;-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--    justify-content: center;-->
+<!--}-->
+
+<!--.leave-item {-->
+<!--    display: flex;-->
+<!--    justify-content: space-between;-->
+<!--    padding: 10px 0;-->
+<!--    border-bottom: 1px solid #ddd;-->
+<!--}-->
+
+<!--.leave-item:last-child {-->
+<!--    border-bottom: none;-->
+<!--}-->
+
+<!--.leave-title {-->
+<!--    font-weight: bold;-->
+<!--    color: #0073e6;-->
+<!--}-->
+
+<!--.leave-value {-->
+<!--    font-size: 18px;-->
+<!--    color: #333;-->
+<!--}-->
+
+<!--.apply-leave-container {-->
+<!--    text-align: center;-->
+<!--    margin-top: 20px;-->
+<!--}-->
+
+<!--.apply-leave-container button {-->
+<!--    background-color: #0073e6;-->
+<!--    color: white;-->
+<!--    border: none;-->
+<!--    padding: 10px 20px;-->
+<!--    border-radius: 5px;-->
+<!--    cursor: pointer;-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--.apply-leave-container button:hover {-->
+<!--    background-color: #005bb5;-->
+<!--}-->
+
+<!--/*Birthday Card*/-->
+<!--.birthday-list {-->
+<!--    list-style: none;-->
+<!--    margin: 0;-->
+<!--    padding: 0;-->
+<!--}-->
+
+<!--.birthday-list li {-->
+<!--    display: flex;-->
+<!--    align-items: center;-->
+<!--    padding: 20px 0;-->
+<!--    border-bottom: 1px solid #ddd;-->
+<!--}-->
+
+<!--.birthday-list li:last-child {-->
+<!--    border-bottom: none;-->
+<!--}-->
+
+<!--.profile-icon {-->
+<!--    width: 50px;-->
+<!--    height: 50px;-->
+<!--    border-radius: 50%;-->
+<!--    margin-right: 10px;-->
+<!--}-->
+
+<!--.birthday-info {-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--}-->
+
+<!--.birthday-name {-->
+<!--    font-size: 18px;-->
+<!--    font-weight: bold;-->
+<!--    color: #333;-->
+<!--}-->
+
+<!--.birthday-position {-->
+<!--    font-size: 14px;-->
+<!--    color: #666;-->
+<!--}-->
+
+<!--.birthday-date {-->
+<!--    font-size: 12px;-->
+<!--    color: #999;-->
+<!--}-->
+
+<!--.profile-icon2 {-->
+<!--    font-size: 50px;-->
+<!--    color: gray;-->
+<!--    padding-right: 12px;-->
+<!--}-->
+
+<!--/*Lunch Menu*/-->
+<!--.lunch-menu-content {-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--    align-items: flex-start;-->
+<!--    padding-top: 10px;-->
+<!--    gap: 35px;-->
+<!--}-->
+
+<!--.menu-item,-->
+<!--.menu-time {-->
+<!--    display: flex;-->
+<!--    align-items: flex-start;-->
+<!--    gap: 10px;-->
+<!--    font-size: 18px;-->
+<!--}-->
+
+<!--.menu-item i,-->
+<!--.menu-time i {-->
+<!--    font-size: 24px;-->
+<!--    color: #0073e6;-->
+<!--    margin-top: 4px; /* Adjusts the alignment */-->
+<!--}-->
+
+<!--.menu-item p,-->
+<!--.menu-time p {-->
+<!--    margin: 0;-->
+<!--}-->
+
+<!--.menu-item div,-->
+<!--.menu-time div {-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--}-->
+
+<!--.reaction-buttons {-->
+<!--    display: flex;-->
+<!--    justify-content: space-around;-->
+<!--    padding-top: 15px;-->
+<!--}-->
+
+<!--.reaction-buttons button {-->
+<!--    display: flex;-->
+<!--    align-items: center;-->
+<!--    gap: 5px;-->
+<!--    padding: 10px 20px;-->
+<!--    font-size: 16px;-->
+<!--    background-color: #0073e6;-->
+<!--    color: white;-->
+<!--    border: none;-->
+<!--    border-radius: 5px;-->
+<!--    cursor: pointer;-->
+<!--}-->
+
+<!--.reaction-buttons button:hover {-->
+<!--    background-color: #005bb5;-->
+<!--}-->
+
+<!--.reaction-buttons button i {-->
+<!--    font-size: 20px;-->
+<!--}-->
+
+
+
+
+
+
+<!--.reaction-buttons {-->
+<!--    display: flex;-->
+<!--    gap: 10px;-->
+<!--}-->
+
+<!--.reaction-buttons button {-->
+<!--    display: flex;-->
+<!--    align-items: center;-->
+<!--    gap: 5px;-->
+<!--    padding: 5px 10px;-->
+<!--}-->
+
+<!--.reaction-buttons button span {-->
+<!--    background-color: white;-->
+<!--    color: #0073e6;-->
+<!--    padding: 2px 6px;-->
+<!--    border-radius: 50%;-->
+<!--}-->
+
+<!--</style>-->
 {% endblock %}
 
 {% block content %}
@@ -35,7 +468,7 @@
 
         <!-- Upcoming Events and Announcements Card -->
         <article class="card">
-            <h2>Events and Announcements</h2>
+            <h2 style="color: red;">Events and Announcements</h2>
 
             <div class="events-section">
                 <h3>Events</h3>

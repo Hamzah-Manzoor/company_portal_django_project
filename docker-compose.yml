@@ -1,0 +1,40 @@
+#version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: employee_portal
+      MYSQL_ROOT_PASSWORD: guyzno34
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db_backup.sql:/docker-entrypoint-initdb.d/db_backup.sql
+    ports:
+      - "3306:3306"
+
+  web:
+    build: .
+    command: gunicorn company_portal.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/company_portal_app
+      - ./static:/company_portal_app/static
+#      - ./employee_management/static:/company_portal_app/employee_management/static
+#      - ./employee_management/static:/static/employee_management
+#      - ./static/employee_management/css/index.css:/company_portal_app/employee_management/static
+#      - ./static:/company_portal_app/static
+
+#      - ./static:/static
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=employee_portal
+      - DB_USER=root
+      - DB_PASSWORD=guyzno34
+
+volumes:
+  mysql_data:
